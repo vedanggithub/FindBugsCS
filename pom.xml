@@ -7,85 +7,64 @@
     <groupId>org.example</groupId>
     <artifactId>Example</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <build>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+<build>
+
     <plugins>
 
         <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>findbugs-maven-plugin</artifactId>
-            <version>2.4.0</version>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-checkstyle-plugin</artifactId>
+            <version>2.17</version>
             <executions>
                 <execution>
-                    <id>findbug</id>
-                    <phase>verify</phase>
+                    <id>checkstyle</id>
+                    <phase>compile</phase>
+                    <goals>
+                        <goal>check</goal>
+                    </goals>
+                    <configuration>
+                        <!-- Fail build if violations found -->
+                        <failOnViolation>true</failOnViolation>
+                        <!-- External configuration file location -->
+                        <configLocation>${basedir}/checkstyle.xml</configLocation>
+                        <!-- Includes packages as per the given wild card config. -->
+                        <includes>com/**/*.java</includes>
+                        <!-- Excludes packages as per the given wild card config. -->
+                        <excludes>com/github/pojo/**/*.java,com/github/abhinavmishra14/**/*Test.java</excludes>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+        <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>findbugs-maven-plugin</artifactId>
+            <version>3.0.4</version>
+            <configuration>
+                <effort>
+                    Max
+                </effort>
+                <threshold>Low</threshold>
+                <xmlOutput>true</xmlOutput>
+                <findbugsXmlOutputDirectory>${project.build.directory}/findbugs</findbugsXmlOutputDirectory>
+            </configuration>
+            <executions>
+                <execution>
+                    <id>static code analysis</id>
+                    <phase>compile</phase>
                     <goals>
                         <goal>check</goal>
                     </goals>
                 </execution>
             </executions>
-            <configuration>
-                <findbugsXmlOutputDirectory>
-                    ${project.build.directory}/findbugs
-                </findbugsXmlOutputDirectory>
-                <failOnError>false</failOnError>
-            </configuration>
-        </plugin>
-
-        <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>xml-maven-plugin</artifactId>
-            <version>1.0</version>
-            <executions>
-                <execution>
-                    <phase>verify</phase>
-                    <goals>
-                        <goal>transform</goal>
-                    </goals>
-                </execution>
-            </executions>
-            <configuration>
-                <transformationSets>
-                    <transformationSet>
-                        <dir>${project.build.directory}/findbugs</dir>
-                        <outputDir>${project.build.directory}/findbugs</outputDir>
-                        <stylesheet>fancy-hist.xsl</stylesheet>
-                        <!--<stylesheet>default.xsl</stylesheet>-->
-                        <!--<stylesheet>plain.xsl</stylesheet>-->
-                        <!--<stylesheet>fancy.xsl</stylesheet>-->
-                        <!--<stylesheet>summary.xsl</stylesheet>-->
-                        <fileMappers>
-                            <fileMapper
-                                    implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
-                                <targetExtension>.html</targetExtension>
-                            </fileMapper>
-                        </fileMappers>
-                    </transformationSet>
-                </transformationSets>
-            </configuration>
-            <dependencies>
-                <dependency>
-                    <groupId>com.google.code.findbugs</groupId>
-                    <artifactId>findbugs</artifactId>
-                    <version>2.0.0</version>
-                </dependency>
-            </dependencies>
         </plugin>
     </plugins>
-    </build>
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.1.1</version>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <report>checkstyle</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
-            </plugin>
-        </plugins>
-    </reporting>
+</build>
+<dependencies>
+</dependencies>
+
+
 </project>
