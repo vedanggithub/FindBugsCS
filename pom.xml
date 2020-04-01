@@ -33,8 +33,7 @@
                         <configLocation>${basedir}/checkstyle.xml</configLocation>
                         <!-- Includes packages as per the given wild card config. -->
                         <includes>com/**/*.java</includes>
-                        <!-- Excludes packages as per the given wild card config. -->
-                        <excludes>com/github/pojo/**/*.java,com/github/abhinavmishra14/**/*Test.java</excludes>
+                        
                     </configuration>
                 </execution>
             </executions>
